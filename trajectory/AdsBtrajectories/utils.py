@@ -30,10 +30,9 @@ def readParquet(fileName):
     print("--- Read parquet file ---")
     
     current_dir = os.getcwd()
-    directoryPath = os.path.join( current_dir , "AnsPerformanceChallenge" )
+    directoryPath = os.path.join( os.path.dirname(__file__) , "AnsPerformanceChallenge" )
     
     #fileName = "2022-01-01.parquet"
-    #directoryPath = "C:\\Users\\rober\\git\\flight-profile\\trajectory\\AdsBtrajectories\\AnsPerformanceChallenge"
     directory = Path(directoryPath)
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
@@ -50,7 +49,7 @@ def readAircraftOpenapData( openapProperty ):
     fileName = "extendedOpenap" + "_" + openapProperty + ".csv"
     current_dir = os.getcwd()
         
-    directoryPath = os.path.join( current_dir , "Results" )
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
@@ -70,7 +69,7 @@ def readExtendedAirports():
     fileName = "extendedAirports.csv"
     current_dir = os.getcwd()
         
-    directoryPath = os.path.join( current_dir , "Results" )
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
@@ -88,7 +87,7 @@ def readExtendedAirportsRunways():
     df = None 
     fileName = 'extendedAirportsRunways.csv'
     current_dir = os.getcwd()
-    directoryPath = os.path.join( current_dir , "Results" )
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
@@ -107,7 +106,7 @@ def readExtendedAircrafts():
     fileName = "extendedAircrafts.csv"
     
     current_dir = os.getcwd()
-    directoryPath = os.path.join( current_dir , "Results" )
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
@@ -153,7 +152,6 @@ def readSubmissionSet(fileName):
     print("--- Read submission set CSV file-> {0}".format(fileName))
     
     #fileName = "final_submission_set.csv"
-    #directoryPath = "C:\\Users\\rober\\git\\flight-profile\\trajectory\\AdsBtrajectories\\AnsPerformanceChallenge"
 
     current_dir = os.getcwd()
     directoryPath = os.path.join( os.path.dirname(__file__) , "AnsPerformanceChallenge" )
