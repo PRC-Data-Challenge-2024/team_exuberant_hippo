@@ -161,3 +161,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 trajectory/AdsBtrajectories/Results/extendedOpenSky.parquet
+trajectory/AdsBtrajectories/Results/extendedAircrafts.csv
+trajectory/AdsBtrajectories/Results/extendedAirportsRunways.csv
+trajectory/AdsBtrajectories/Runways/RunWays.xlsx

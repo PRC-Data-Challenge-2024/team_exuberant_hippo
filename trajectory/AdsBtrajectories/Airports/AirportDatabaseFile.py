@@ -87,7 +87,7 @@ class AirportsDatabase(object):
         self.airportsFilesFolder = os.path.dirname(__file__)
 
         logging.info ( self.className + ': file folder= {0}'.format(self.airportsFilesFolder) )
-        self.FilePath = os.path.join( (self.airportsFilesFolder , self.FilePath)
+        self.FilePath = os.path.join(self.airportsFilesFolder , self.FilePath)
         logging.info ( self.className + ': file path= {0}'.format(self.FilePath) )
 
     def read(self):

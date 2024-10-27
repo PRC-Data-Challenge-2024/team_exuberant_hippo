@@ -8,10 +8,10 @@ import os
 from pathlib import Path
 import pandas as pd
 
-from trajectory.AdsBtrajectories.utils import computeChallengeSubmission, readExtendedAirports
+from utils import computeChallengeSubmission, readExtendedAirports
 from trajectory.AdsBtrajectories.Aircrafts.FAAaircraftDatabaseFile import FaaAircraftDatabase
-from trajectory.AdsBtrajectories.utils import computePotentialEnergy , computeKineticEnergy
-from trajectory.AdsBtrajectories.utils import computePotentialPower , computeKineticPower
+from utils import computePotentialEnergy , computeKineticEnergy
+from utils import computePotentialPower , computeKineticPower
 
 if __name__ == '__main__':
     

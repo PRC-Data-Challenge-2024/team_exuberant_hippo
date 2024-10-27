@@ -7,18 +7,17 @@ Created on 15 oct. 2024
 import os
 from pathlib import Path
 import pandas as pd
-from trajectory.AdsBtrajectories.Airports.AirportDatabaseFile import AirportsDatabase
+from Airports.AirportDatabaseFile import AirportsDatabase
 from datetime import datetime
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import make_column_transformer
 
-from trajectory.AdsBtrajectories.Aircrafts.FAAaircraftDatabaseFile import FaaAircraftDatabase
-from trajectory.Guidance.ConstraintsFile import feet2Meters 
-from trajectory.Environment.Constants import  gravity_meter_square_seconds , Knots2MetersSeconds
+from Aircrafts.FAAaircraftDatabaseFile import FaaAircraftDatabase
+from Guidance.ConstraintsFile import feet2Meters 
+from Environment.Constants import  gravity_meter_square_seconds , Knots2MetersSeconds
 
-from trajectory.AdsBtrajectories.Runways.RunWaysDatabaseFile import RunWayDataBase
-
-from trajectory.AdsBtrajectories.Atmosphere.Atmosphere import Atmosphere
+from Runways.RunWaysDatabaseFile import RunWayDataBase
+from Atmosphere.Atmosphere import Atmosphere
 
 DateFormatWithSlashes = '%d/%m/%Y'
 DateFormatWithDashes = "%Y-%m-%d"
