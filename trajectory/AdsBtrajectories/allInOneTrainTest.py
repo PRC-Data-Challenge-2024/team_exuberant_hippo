@@ -18,11 +18,11 @@ from pathlib import Path
 from datetime import datetime
 
 from sklearn.metrics import  root_mean_squared_error
-from trajectory.AdsBtrajectories.utils import encodeCategoryColumn
+from utils import encodeCategoryColumn
 import pandas as pd
 import xgboost as xgb
 from xgboost import XGBRegressor
-from trajectory.AdsBtrajectories.extendOpenSkyParquet import extendUsingParquets
+from extendOpenSkyParquet import extendUsingParquets
 
 
 def convert_airlines_keys(unique_airlines_values , rowValue):
