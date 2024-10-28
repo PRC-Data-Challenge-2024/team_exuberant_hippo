@@ -227,16 +227,16 @@ def extendUsingParquets(testMode=False):
 if __name__ == '__main__':
     
     testMode = False
-    testMode = True
+    #testMode = True
     df_final = extendUsingParquets(testMode)
     
     fileName = 'extendedOpenSky.parquet'
     current_dir = os.getcwd()
-    
-    #directoryPath = "C:\\Users\\rober\\git\\flight-profile\\trajectory\\AdsBtrajectories\\Results"
-    
-    directoryPath = os.path.join( current_dir , "Results" )
+        
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
+    print ( directory )
+
     if directory.is_dir():
             print ( "it is a directory - {0}".format(directoryPath))
             filePath = os.path.join(directory, fileName)

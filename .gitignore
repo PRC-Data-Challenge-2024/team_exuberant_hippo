@@ -164,3 +164,11 @@ trajectory/AdsBtrajectories/Results/extendedOpenSky.parquet
 trajectory/AdsBtrajectories/Results/extendedAircrafts.csv
 trajectory/AdsBtrajectories/Results/extendedAirportsRunways.csv
 trajectory/AdsBtrajectories/Runways/RunWays.xlsx
+
+*.parquet
+trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/*.parquet
+trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/*.parquet.part.minio
+
+trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/challenge_set.csv
+trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/final_submission_set.csv
+trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/submission_set.csv

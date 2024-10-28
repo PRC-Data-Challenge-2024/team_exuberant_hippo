@@ -98,7 +98,9 @@ for each initial set, the DateTime string pattern is converted to 4 ISO integers
 ## use challenge set with tow not null and split it in 80 / 20 %
 ## train using challenge
 
-## compte RMSE
+## compute RMSE
+The root mean squared error (MSE) on test set: 2939.7507
+
 ## isolate the Y_to_predict based upon tow is null
 ## launch the Y_prediction and build the "submission" CSV file
 ## as this CSV submission file has only the TOW value, launch create Submission.py to obtain a file with the flight_ids and the tow

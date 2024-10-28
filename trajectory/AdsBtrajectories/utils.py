@@ -29,8 +29,8 @@ def readParquet(fileName):
     print("--- Read parquet file ---")
     
     current_dir = os.getcwd()
-    directoryPath = os.path.join( os.path.dirname(__file__) , "AnsPerformanceChallenge" )
-    
+    directoryPath = os.path.join( os.path.dirname(__file__) ,  "AnsPerformanceChallenge" ,'competition-data')
+    print ( directoryPath )
     #fileName = "2022-01-01.parquet"
     directory = Path(directoryPath)
     if directory.is_dir():
