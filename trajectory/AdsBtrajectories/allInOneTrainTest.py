@@ -141,7 +141,6 @@ if __name__ == '__main__':
         df = df.drop('ades', axis=1)
         print ( list ( df ) )
         
-    
     if ( testMode == False):
 
         print('''--- left join challenge and submission -> with parquet files data --- ''')
