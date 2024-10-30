@@ -12,7 +12,7 @@ from utils import extendDataSetWithDates
 from utils import extendDataSetWithRunwaysdata
 from utils import extendDataSetWithAircraftData
 from utils import readExtendedAirportsRunways , readExtendedAirports, readExtendedAircrafts
-from utils import readAircraftOpenapData , readOpenSkyMediansClimbDescentRates
+from utils import readAircraftOpenapData , readOpenSkyMediansClimbDescentRates , readExtendedChallengeSetDurations
 
 from pathlib import Path
 from datetime import datetime
@@ -155,6 +155,17 @@ if __name__ == '__main__':
         df = df.merge( df_medians, how="left", on="flight_id" )
         print ( df.shape )
         print ( list ( df ))
+
+    extendedClimbDescentCruiseIsExisting = True
+    if extendedClimbDescentCruiseIsExisting == True:
+
+        df_durations = readExtendedChallengeSetDurations()
+        print('''--- left join challenge and submission -> with openSky median climb descent rates --- ''')
+
+        df = df.merge( df_durations, how="left", on="flight_id" )
+        print ( df.shape )
+        print ( list ( df ))
+
 
     print(''' drop unused columns ''')
     print(''' column containing a string must be dropped because string cannot be converted to float ''')

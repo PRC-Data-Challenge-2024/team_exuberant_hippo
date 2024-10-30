@@ -118,6 +118,21 @@ def readExtendedAirportsRunways():
 
     return df
 
+def readExtendedChallengeSetDurations():
+    df = None 
+    fileName = 'extendedChallengeSetDurations.csv'
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
+    directory = Path(directoryPath)
+    if directory.is_dir():
+        print ( "it is a directory - {0}".format(directoryPath))
+        filePath = os.path.join(directory, fileName)
+        print ( filePath )
+        
+        df = pd.read_csv( filePath , sep = ";")
+
+    return df
+
+
 def readExtendedAircrafts():
     
     df = None

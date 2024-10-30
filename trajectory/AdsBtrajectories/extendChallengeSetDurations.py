@@ -34,18 +34,42 @@ def usage():
 
 
 def computeDurationOfClimbMinutes(departureAirportAltitudeFeet, cruiseAltitudeFeet, AverageClimbRateFeetPerMinutes):
+    defaultDurationMinutes = 15.0
+    if math.isnan(AverageClimbRateFeetPerMinutes) or math.isnan(cruiseAltitudeFeet):
+        return defaultDurationMinutes
+
     climbDifferenceFeet = cruiseAltitudeFeet - departureAirportAltitudeFeet
-    if ( abs ( AverageClimbRateFeetPerMinutes) < sys.float_info.epsilon ):
-        return 15.0
+    if ( abs ( AverageClimbRateFeetPerMinutes)  < sys.float_info.epsilon ):
+        return defaultDurationMinutes
     else:
-        return abs(climbDifferenceFeet) / abs(AverageClimbRateFeetPerMinutes)
+        durationOfClimbMinutes = abs(climbDifferenceFeet) / abs(AverageClimbRateFeetPerMinutes)
+        if  abs ( durationOfClimbMinutes ) < sys.float_info.epsilon:
+            return defaultDurationMinutes
+        else:
+            return max ( abs(durationOfClimbMinutes) , defaultDurationMinutes )
 
 def computeDurationOfDescentMinutes(destinationAirportAltitudeFeet , cruiseAltitudeFeet , averageDescentRateFeetPerMinutes):
+    defaultDurationMinutes = 30.0
+    if math.isnan(averageDescentRateFeetPerMinutes) or math.isnan(cruiseAltitudeFeet):
+        return defaultDurationMinutes
+
     descentDifferenceFeet = cruiseAltitudeFeet - destinationAirportAltitudeFeet
     if ( abs( averageDescentRateFeetPerMinutes) < sys.float_info.epsilon):
-        return 30.0
+        return defaultDurationMinutes
     else:
-        return abs(descentDifferenceFeet) / abs(averageDescentRateFeetPerMinutes)
+        durationOfDescentMinutes = abs(descentDifferenceFeet) / abs(averageDescentRateFeetPerMinutes)
+        if ( abs(durationOfDescentMinutes) < sys.float_info.epsilon):
+            return defaultDurationMinutes
+        else:
+            return max ( abs(durationOfDescentMinutes) , defaultDurationMinutes )
+    
+def computeDurationOfCruiseMinutes( flightDurationMinutes, descentDurationMinutes , climbDurationMinutes):
+    cruiseDurationMinutes = flightDurationMinutes
+    if (flightDurationMinutes > descentDurationMinutes):
+        cruiseDurationMinutes = flightDurationMinutes - descentDurationMinutes
+    if (cruiseDurationMinutes > climbDurationMinutes):
+        cruiseDurationMinutes = cruiseDurationMinutes - climbDurationMinutes
+    return cruiseDurationMinutes
 
 if __name__ == '__main__':
 
@@ -71,19 +95,20 @@ if __name__ == '__main__':
     start = time.time()
     df['climbDurationMinutes'] = df.apply(lambda row: computeDurationOfClimbMinutes(row['adep_elevation_meters']*Meter2Feet , row['maxAltitudeFeet'], row['avgClimbRateFeetMinutes']), axis=1)
     end = time.time()
-    print ( end - start)
+    print ("time to compute Climb Duration Minutes -> {0} seconds".format(end - start))
 
     print("-"*80)
     start = time.time()
     df['descentDurationMinutes'] = df.apply(lambda row: computeDurationOfDescentMinutes(row['ades_elevation_meters']*Meter2Feet , row['maxAltitudeFeet'], row['avgDescentRateFeetMinutes']), axis=1)
     end = time.time()
-    print ( end - start)
+    print ("time to compute Descent Duration Minutes -> {0} seconds".format(end - start))
+
 
     print("-"*80)
     start = time.time()
-    df['cuiseDurationMinutes'] = df.apply(lambda row: (row['flight_duration'] - row['descentDurationMinutes'] - row['climbDurationMinutes']), axis=1)
+    df['cuiseDurationMinutes'] = df.apply(lambda row: computeDurationOfCruiseMinutes( row['flight_duration'] , row['descentDurationMinutes'], row['climbDurationMinutes']), axis=1)
     end = time.time()
-    print ( end - start)
+    print ("time to compute Cruise Duration Minutes -> {0} seconds".format(end - start))
  
     print ( list ( df ) )
     for columnName in list ( df ) :
@@ -91,7 +116,10 @@ if __name__ == '__main__':
             pass
         else:
             df.drop(labels=columnName, axis=1, inplace=True)
-        
+    
+    print("-"*80)
+    print ( list( df ))
+    print("-"*80)
     outputCsvFileName = "extendedChallengeSetDurations.csv"
 
     directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
@@ -99,5 +127,5 @@ if __name__ == '__main__':
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
         filePath = os.path.join(directory, outputCsvFileName)
-            
+        print ( filePath )
         df.to_csv(filePath , index = False , sep = ";")

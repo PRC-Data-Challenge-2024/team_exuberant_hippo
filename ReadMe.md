@@ -100,6 +100,10 @@ for each initial set, the DateTime string pattern is converted to 4 ISO integers
 
 ## compute RMSE
 The root mean squared error (MSE) on test set: 2939.7507
+add median instead of average
+The root mean squared error (MSE) on test set: 2870.2141
+add durations of climb descent and cruise
+The root mean squared error (MSE) on test set: 2955.6551
 
 ## isolate the Y_to_predict based upon tow is null
 ## launch the Y_prediction and build the "submission" CSV file

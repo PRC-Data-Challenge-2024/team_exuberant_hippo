@@ -33,7 +33,6 @@ def extendedOneDayParquet(df , df_challengeSubmission):
     ''' filter parquet on flight_id in challenge and final sumission '''
     df = df[df['flight_id'].isin(df_challengeSubmission['flight_id'])]
 
-    
     ''' df _filtered is the final dataframe where to merge all results '''
     df_filtered = df.filter( items = ['flight_id'] ).drop_duplicates()
 
