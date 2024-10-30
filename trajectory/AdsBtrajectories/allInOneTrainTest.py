@@ -12,7 +12,7 @@ from utils import extendDataSetWithDates
 from utils import extendDataSetWithRunwaysdata
 from utils import extendDataSetWithAircraftData
 from utils import readExtendedAirportsRunways , readExtendedAirports, readExtendedAircrafts
-from utils import readAircraftOpenapData
+from utils import readAircraftOpenapData , readOpenSkyMediansClimbDescentRates
 
 from pathlib import Path
 from datetime import datetime
@@ -56,25 +56,6 @@ if __name__ == '__main__':
             df_parquets = pd.read_parquet ( filePath )
             print ( df_parquets.shape )
             print ( list ( df_parquets))
-
-    else:
-        
-        df_parquets = extendUsingParquets(testMode=testMode)
-        # Fill NaN values in all columns with their respective means
-        #df_parquets.fillna(df_parquets.mean(), inplace=True)
-        
-        print ( df_parquets.shape )
-        print ( list ( df_parquets ))
-        print ( df_parquets.head(100))
-        
-        current_dir = os.getcwd()
-        directoryPath = os.path.join( current_dir , "Results" )
-        
-        directory = Path(directoryPath)
-        if directory.is_dir():
-            print ( "it is a directory - {0}".format(directoryPath))
-            filePath = os.path.join(directory, fileName)
-            df_parquets.to_parquet(filePath)
         
     
     print(''' ---------- read the challenge train dataset with True TOW values ''')
@@ -113,14 +94,6 @@ if __name__ == '__main__':
         df = df.merge( df_airports , how="left", on="flight_id"  )
         print ( df.shape )
         print ( list ( df ))
-
-    else:
-        
-        print ("---- add airports extension ---")
-        df = extendDataSetWithAirportData(df)
-        print ( df.shape )
-        print ( list ( df ) )
-        print ( "number of rows = {0}".format ( len(df.index) ) )
         
         
     extendedAirportsRunwaysIsExisting = True
@@ -134,12 +107,6 @@ if __name__ == '__main__':
         print ( df.shape )
         print ( list ( df ))
  
-    else:
-        print ("--- add runways count ---")
-        df = extendDataSetWithRunwaysdata(df)
-        df = df.drop('adep', axis=1)
-        df = df.drop('ades', axis=1)
-        print ( list ( df ) )
         
     if ( testMode == False):
 
@@ -168,16 +135,10 @@ if __name__ == '__main__':
         print ( df.shape )
         print ( list ( df ))
         
-    else:
-        
-        df = extendDataSetWithAircraftData(df)
-        
-        #print ( df.shape )
-        print ( list ( df ) )
-        print ( "number of rows = {0}".format ( len(df.index) ) )
 
     ''' add openap data for each aircraft '''
     for openapProperty in ['ceiling', 'cruise_mach']:
+
         df_openap = readAircraftOpenapData( openapProperty )
     
         print('''--- left join challenge and submission -> with openap data --- ''')
@@ -185,7 +146,16 @@ if __name__ == '__main__':
         print ( df.shape )
         print ( list ( df ))
 
-    
+    extendedOpenSkyMediansIsExisting = True
+    if extendedOpenSkyMediansIsExisting == True:
+
+        df_medians = readOpenSkyMediansClimbDescentRates()
+        print('''--- left join challenge and submission -> with openSky median climb descent rates --- ''')
+
+        df = df.merge( df_medians, how="left", on="flight_id" )
+        print ( df.shape )
+        print ( list ( df ))
+
     print(''' drop unused columns ''')
     print(''' column containing a string must be dropped because string cannot be converted to float ''')
     #df = df.drop(columns=['flight_id', 'callsign', 'actual_offblock_time','arrival_time'])
@@ -310,16 +280,6 @@ if __name__ == '__main__':
     print ( list ( Y_submission_df ))
     print ( Y_submission_df.head(10))
     
-    print ("--- recover the whole submission dataset ---")
-    #Y_submission_df = pd.merge( X_submission_df, Y_submission_df, left_index=True, right_index=True)
-    #print ( Y_submission_df.shape )
-    #print ( Y_submission_df.head(10))
-    
-    print ('--- save the results to CSV ---')
-    #teamId = "f8afb85a-8f3f-4270-b0bd-10f9ba83adf4"
-    #teamName = "team_exuberant_hippo"
-    #version = "V1"
-    #outputFileName = teamName + "_" + version + "_" + teamId + ".csv"
     
     outputFileName = "final_team_submission"
     outputFileName = outputFileName + '_{0}.csv'.format(datetime.now().strftime("%d-%b-%Y-%Hh%Mm%S"))

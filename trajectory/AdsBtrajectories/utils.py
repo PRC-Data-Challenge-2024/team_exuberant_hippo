@@ -46,7 +46,6 @@ def readAircraftOpenapData( openapProperty ):
     print("--- Read openap file for property = {0}".format( openapProperty ))
     
     fileName = "extendedOpenap" + "_" + openapProperty + ".csv"
-    current_dir = os.getcwd()
         
     directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
@@ -60,6 +59,26 @@ def readAircraftOpenapData( openapProperty ):
         print ( list ( df ) )
     
     return df 
+
+def readOpenSkyMediansClimbDescentRates( ):
+
+    df = None
+    print ("--- read Opensky Median Climb and Descent Rates")
+
+    fileName = "extendedOpenSkyMedians.csv"
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
+    directory = Path(directoryPath)
+    if directory.is_dir():
+        print ( "it is a directory - {0}".format(directoryPath))
+        filePath = os.path.join(directory, fileName)
+        print ( filePath )
+        
+        df = pd.read_csv( filePath , sep = ";")
+
+        print ( list ( df ) )
+    
+    return df 
+
 
 def readExtendedAirports():
     

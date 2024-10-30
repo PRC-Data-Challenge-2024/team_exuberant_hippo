@@ -79,7 +79,6 @@ def extendUsingParquets(testMode=False):
     return df_final
 
 
-
 if __name__ == '__main__':
     
     testMode = False
@@ -92,7 +91,7 @@ if __name__ == '__main__':
         else:
             df_final.drop(labels=columnName, axis=1,inplace=True)
     
-    fileName = 'extendedOpenSkyMedians.parquet'
+    fileName = 'extendedOpenSkyMedians.csv'
         
     directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
@@ -101,9 +100,11 @@ if __name__ == '__main__':
     if directory.is_dir():
             print ( "it is a directory - {0}".format(directoryPath))
             filePath = os.path.join(directory, fileName)
+            print (filePath)
             ''' write the parquet file to Results '''
             if testMode == False:
-                df_final.to_parquet(filePath)
+                df_final.to_csv(filePath , index = False , sep = ";")
+
             else:
                 print ("--- test mode = {0}".format(testMode))
                                         
