@@ -232,8 +232,15 @@ def extractMonth(dateStr):
         date = datetime.strptime(dateStr, DateFormatWithDashes )
     else:
         date = datetime.strptime(dateStr, DateFormatWithSlashes )
- 
     return date.month
+
+def extractQuarter(dateStr):
+    if str(dateStr).find("-")>0:
+        date = datetime.strptime(dateStr, DateFormatWithDashes )
+    else:
+        date = datetime.strptime(dateStr, DateFormatWithSlashes )
+    return pd.Timestamp(date).quarter
+
 
 def oneHotEncoder(columnNameList):
     assert ( isinstance ( columnNameList , list ))
@@ -246,10 +253,12 @@ def extendDataSetWithDates(df):
     if ( not df is None ) and ( isinstance(df , pd.DataFrame )):
         print ("--------- extend dataset with dates as integers -----")
         
-        df['date_year'] = df.apply ( lambda row : extractISOYear( row['date']), axis=1)
-        df['date_month'] = df.apply ( lambda row : extractMonth( row['date']), axis=1)
-        df['date_week'] = df.apply ( lambda row : extractISOWeek( row['date']), axis=1)
-        df['date_week_day'] = df.apply ( lambda row : extractISOWeekDay( row['date']), axis=1)
+        df['date_year'] = df.apply ( lambda row : extractISOYear( row['date'] ), axis=1)
+        df['date_month'] = df.apply ( lambda row : extractMonth( row['date'] ), axis=1)
+        df['date_week'] = df.apply ( lambda row : extractISOWeek( row['date'] ), axis=1)
+        df['date_week_day'] = df.apply ( lambda row : extractISOWeekDay( row['date'] ), axis=1)
+        df['date_quarter'] = df.apply ( lambda row : extractQuarter ( row['date'] ) , axis=1)
+
         ''' drop string date '''
         df = df.drop(columns=['date'])
 
@@ -272,6 +281,7 @@ def computeKineticEnergy( aircraft_mass_lb , average_ground_speed_knots ):
     aircraft_mass_kilograms = lbToKilograms * aircraft_mass_lb
     average_ground_speed_meters_per_second = average_ground_speed_knots * Knots2MetersSeconds
     return 0.5 * aircraft_mass_kilograms * average_ground_speed_meters_per_second * average_ground_speed_meters_per_second
+
 
 def computeKineticPower( aircraft_mass_lb , average_ground_speed_knots  ,flight_duration_minutes ):
     aircraft_mass_kilograms = lbToKilograms * aircraft_mass_lb
@@ -355,7 +365,7 @@ def extendDataSetWithAirportData(df):
             #columnsToDrop = ['ades', 'adep', 'name_adep', 'country_code_adep', 'name_ades' , 'country_code_ades']
             ''' 23 October 2024 - encode adep an ades hence do not drop them here  '''
             ''' 23 October 2024 - encode country codes hence do not drop them here '''
-            columnsToDrop = [ 'name_adep', 'name_ades' , 'country_code_adep' , 'country_code_ades']
+            columnsToDrop = [ 'name_adep', 'name_ades' ]
             df = df.drop(columns=columnsToDrop)
             
             print ( list ( df ) )

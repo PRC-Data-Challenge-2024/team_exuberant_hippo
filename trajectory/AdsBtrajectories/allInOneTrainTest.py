@@ -156,7 +156,7 @@ if __name__ == '__main__':
         print ( df.shape )
         print ( list ( df ))
 
-    extendedClimbDescentCruiseIsExisting = True
+    extendedClimbDescentCruiseIsExisting = False
     if extendedClimbDescentCruiseIsExisting == True:
 
         df_durations = readExtendedChallengeSetDurations()
@@ -190,13 +190,14 @@ if __name__ == '__main__':
     oheAdep , df_encoded_adep , final_df = encodeCategoryColumn ( final_df , 'adep')
     oheAdes , df_encoded_ades , final_df = encodeCategoryColumn ( final_df , 'ades')
     ''' 23 October 2024 - Encode adep country code and ades country code '''
-    #oheAdepCountryCode , df_encoded_adep_country , final_df = encodeCategoryColumn ( final_df , 'country_code_adep')
-    #oheAdesCountryCode , df_encoded_ades_country , final_df = encodeCategoryColumn ( final_df , 'country_code_ades')
+    oheAdepCountryCode , df_encoded_adep_country , final_df = encodeCategoryColumn ( final_df , 'country_code_adep')
+    oheAdesCountryCode , df_encoded_ades_country , final_df = encodeCategoryColumn ( final_df , 'country_code_ades')
     
     print(list(final_df))
     ''' drop columns containing categories '''
-    for column in ['name_adep','country_code_adep','name_ades','country_code_ades']:
-        final_df = final_df.drop(column, axis=1)
+    for column in ['name_adep','name_ades']:
+        if column in list(final_df):
+            final_df = final_df.drop(column, axis=1)
         
     ''' 27th October 2024 '''
     #final_df = final_df.extendedAircraftsWithOpenap(df)

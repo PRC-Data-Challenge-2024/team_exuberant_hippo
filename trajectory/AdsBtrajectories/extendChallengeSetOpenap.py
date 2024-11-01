@@ -22,7 +22,6 @@ def computeOpenapProperty( actype , openapProperty):
     aircraft = prop.aircraft(ac=str(actype).lower(), use_synonym=True)
     return aircraft[openapProperty]
 
-
 def computeOpenapSubProperty ( actype , mainProperty, subProperty ):
     if ( str(actype).lower() == 'bcs3' ) or ( str(actype).lower() == 'bcs1' ) :
             actype = 'a310'

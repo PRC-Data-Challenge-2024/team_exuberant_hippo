@@ -104,6 +104,7 @@ add median instead of average
 The root mean squared error (MSE) on test set: 2870.2141
 add durations of climb descent and cruise
 The root mean squared error (MSE) on test set: 2955.6551
+The root mean squared error (MSE) on test set: 2907.8136
 
 ## isolate the Y_to_predict based upon tow is null
 ## launch the Y_prediction and build the "submission" CSV file

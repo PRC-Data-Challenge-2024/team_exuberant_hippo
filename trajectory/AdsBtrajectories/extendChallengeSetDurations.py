@@ -8,31 +8,6 @@ from pathlib import Path
 import sys
 import time
 
-def usage():
-    # create a fuel flow model for A320
-    fuelflow = FuelFlow(ac='A320')
-
-    # estimate fuel flow during cruise
-    FuelFlowKgPerSeconds = fuelflow.enroute(mass=60000, tas=230, alt=32000)
-    print ("en route fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
-
-    # estimate fuel flow at climb, with vertical speed (feet/min)
-    FuelFlowKgPerSeconds = fuelflow.enroute(mass=60000, tas=200, alt=20000, vs=1000)
-    print ("en route fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
-
-    # estimate fuel flow at with a given thrust (e.g., derived from drag model)
-    FuelFlowKgPerSeconds = fuelflow.at_thrust(acthr=50000, alt=30000)
-    print ("at thrust fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
-
-    # estimate fuel flow at takeoff
-    FuelFlowKgPerSeconds = fuelflow.takeoff(tas=100, alt=0, throttle=1)
-    print ("takeoff fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
-
-
 def computeDurationOfClimbMinutes(departureAirportAltitudeFeet, cruiseAltitudeFeet, AverageClimbRateFeetPerMinutes):
     defaultDurationMinutes = 15.0
     if math.isnan(AverageClimbRateFeetPerMinutes) or math.isnan(cruiseAltitudeFeet):
