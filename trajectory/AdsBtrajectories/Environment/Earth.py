@@ -32,7 +32,7 @@ import math
 EarthRadiusMeters     = 6378135.0 # earth’s radius in meters
 
 
-class Earth():
+class Earth(object):
     
     radiusMeters = 6378135.0 # earth’s radius in meters
     omega = 2 * math.pi/ (23 * 3600 + 56 * 60 + 4.0905) # earth’s rot. speed (rad/s)
