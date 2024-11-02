@@ -174,3 +174,6 @@ trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/final_submi
 trajectory/AdsBtrajectories/AnsPerformanceChallenge/competition-data/submission_set.csv
 trajectory/AdsBtrajectories/Results/extendedChallengeSetDurations.csv
 trajectory/AdsBtrajectories/Results/extendedOpenSkyMedians.csv
+trajectory/AdsBtrajectories/Results/extendedOpenap_pax_high.csv
+trajectory/AdsBtrajectories/Results/extendedOpenap_pax_low.csv
+trajectory/AdsBtrajectories/Results/extendedOpenap_pax_max.csv

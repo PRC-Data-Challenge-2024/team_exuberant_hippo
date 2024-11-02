@@ -13,6 +13,7 @@ from utils import extendDataSetWithRunwaysdata
 from utils import extendDataSetWithAircraftData
 from utils import readExtendedAirportsRunways , readExtendedAirports, readExtendedAircrafts
 from utils import readAircraftOpenapData , readOpenSkyMediansClimbDescentRates , readExtendedChallengeSetDurations
+from utils import readOpenapPaxData
 
 from pathlib import Path
 from datetime import datetime
@@ -167,10 +168,26 @@ if __name__ == '__main__':
         print ( list ( df ))
 
 
-    print(''' drop unused columns ''')
-    print(''' column containing a string must be dropped because string cannot be converted to float ''')
+    ''' 2nd November 2024 - added pax data from Openap '''
+    extendedOpenapPaxDataIsAvailable = True
+    if extendedOpenapPaxDataIsAvailable ==  True:
+
+        df_openap_pax = readOpenapPaxData()
+        print('''--- left join challenge and submission -> with openSky median climb descent rates --- ''')
+
+        df = df.merge( df_openap_pax, how="left", on="flight_id" )
+        print ( df.shape )
+        print ( list ( df ))
+
+
+    print('''--- drop unused columns ''')
+    print('''--- column containing a string must be dropped because string cannot be converted to float ''')
+    print("--- categorical data not suitable for extreme gradient boost")
     #df = df.drop(columns=['flight_id', 'callsign', 'actual_offblock_time','arrival_time'])
-    df = df.drop(columns=[ 'callsign', 'actual_offblock_time','arrival_time'])
+    for columnName in [ 'callsign', 'actual_offblock_time','arrival_time']:
+        if columnName in list(df):
+            df = df.drop(columnName, axis=1)
+
     print ( list ( df ))
     
     print ("--- encode airline ---")
@@ -201,11 +218,13 @@ if __name__ == '__main__':
         
     ''' 27th October 2024 '''
     #final_df = final_df.extendedAircraftsWithOpenap(df)
+
     
     print ( list ( final_df ))
     print(final_df.head(10))
     
-    print ( '--- keep only records with tow being not null ---')
+    ''' prepare for train and test '''
+    print ( '--- train dataframe - keep only records with tow being not null ---')
     tow_not_null_df = final_df[final_df['tow'].notnull()]
     print ( tow_not_null_df.shape  )
     

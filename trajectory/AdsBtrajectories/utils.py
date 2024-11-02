@@ -199,6 +199,30 @@ def readSubmissionSet(fileName):
     
     return df
 
+
+def readOpenapPaxData():
+
+    df = None
+    fileName = "extendedOpenap_pax_high.csv"
+    print("--- Read Openap Pax CSV file-> {0}".format(fileName))
+
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
+
+    directory = Path(directoryPath)
+    if directory.is_dir():
+        print ( "it is a directory - {0}".format(directoryPath))
+        filePath = os.path.join(directory, fileName)
+        print ( filePath )
+        
+        df = pd.read_csv ( filePath , sep = ";" )
+        print ( list (df ))
+        for columnName in ['aircraft_type']:
+            if columnName in list(df):
+                df = df.drop(columnName, axis=1)
+
+    return df
+
+
 def extractISOYear(dateStr):
     ''' 01/01/2024 '''
     if str(dateStr).find("-")>0:
