@@ -107,6 +107,8 @@ The root mean squared error (MSE) on test set: 2955.6551
 The root mean squared error (MSE) on test set: 2907.8136
 add openap pax data high low max
 The root mean squared error (MSE) on test set: 2919.5714
+add isDomestic 
+The root mean squared error (MSE) on test set: 2914.5551
 
 
 ## isolate the Y_to_predict based upon tow is null

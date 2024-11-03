@@ -1,4 +1,6 @@
 name,alpha-2,alpha-3,country-code,iso_3166-2,region,sub-region,intermediate-region,region-code,sub-region-code,intermediate-region-code
+Kosovo,XK,KOS,ISO 3166-2:XK,Europe,Eastern Europe,"",150,151,""
+Country of Curaçao,AN,CUR,ISO 3166-2:CW,Americas,Latin America and the Caribbean,Caribbean,019,419,029
 Afghanistan,AF,AFG,004,ISO 3166-2:AF,Asia,Southern Asia,"",142,034,""
 Åland Islands,AX,ALA,248,ISO 3166-2:AX,Europe,Northern Europe,"",150,154,""
 Albania,AL,ALB,008,ISO 3166-2:AL,Europe,Southern Europe,"",150,039,""

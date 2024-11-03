@@ -434,3 +434,31 @@ def computeChallengeSubmission():
     print ( df_concat.shape )
     print ( list ( df_concat ))
     return df_concat
+
+
+def readChallengeSetAdepAdesIsDomestic():
+
+    print(''' ---------- read the challenge set extended with isDomestic True False ''')
+
+    df = None
+    fileName = "extendedAdepAdesIsDomestic.csv"
+    print("--- Read CSV file-> {0}".format(fileName))
+
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
+
+    directory = Path(directoryPath)
+    if directory.is_dir():
+        print ( "it is a directory - {0}".format(directoryPath))
+        filePath = os.path.join(directory, fileName)
+        print ( filePath )
+        
+        df = pd.read_csv ( filePath , sep = ";" )
+        print ( list (df ))
+        for columnToKeep in list(df):
+            if columnToKeep in ['flight_id','isDomestic']:
+                pass
+            else:
+                df = df.drop(columnToKeep, axis=1)
+
+        print ( list(df))
+    return df

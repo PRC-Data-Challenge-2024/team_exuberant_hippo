@@ -36,18 +36,36 @@ class Country(object):
 
 
     def isCountryExisting(self, twoCharactersCountryCode):
-        if twoCharactersCountryCode in list(self.df['alpha-2']):
-            filtered_df = self.df[self.df['alpha-2'] ==  twoCharactersCountryCode ]
-            print(filtered_df)
+        if str(twoCharactersCountryCode).upper() in list(self.df['alpha-2']):
+            filtered_df = self.df[self.df['alpha-2'] ==  str(twoCharactersCountryCode).upper() ]
+            #print(filtered_df['alpha-2'].iloc[0])
             return True
         return False
     
+
     def getCountryRegion(self, twoCharactersCountryCode):
-        if twoCharactersCountryCode in list(self.df['alpha-2']):
-            filtered_df = self.df[self.df['alpha-2'] ==  twoCharactersCountryCode ]
+        if str(twoCharactersCountryCode).upper() in list(self.df['alpha-2']):
+            filtered_df = self.df[self.df['alpha-2'] ==  str(twoCharactersCountryCode).upper() ]
             print(filtered_df)
             return filtered_df['region'].iloc[0]  
         return ""
+
+
+    def isDomestic( self, adepCountryCode, adesCountryCode , region):
+        adepRegion = "Europe"
+        if str(adepCountryCode).upper() in list(self.df['alpha-2']):
+            filtered_df = self.df[self.df['alpha-2'] ==  str(adepCountryCode).upper() ]
+            print(filtered_df)
+            adepRegion = filtered_df['region'].iloc[0] 
+        if str(adesCountryCode).upper() in list(self.df['alpha-2']):
+            filtered_df = self.df[self.df['alpha-2'] ==  str(adesCountryCode).upper() ]
+            print(filtered_df)
+            adesRegion = filtered_df['region'].iloc[0]
+        if adepRegion == region and adesRegion == region:
+            return True
+        else:
+            return False
+        
 
 
 if __name__ == '__main__':
@@ -55,12 +73,37 @@ if __name__ == '__main__':
     countries = Country()
     ret = countries.read()
 
+    print("-"*80)
     print ("Countries read correctly = {0}".format(ret))
+
+    print("-"*80)
 
     ret = countries.isCountryExisting("FR")
     print("Country is existing = {0}".format(ret))
+
+    print("-"*80)
+
+    ret = countries.isCountryExisting("Fr")
+    print("Country is existing = {0}".format(ret))
+
+    print("-"*80)
 
     countryCode = "FR"
     region = countries.getCountryRegion(countryCode)
     print( type ( region ))
     print("{0} in region -> {1}".format( countryCode, region))
+
+    print("-"*80)
+
+    countryCode = "fr"
+    region = countries.getCountryRegion(countryCode)
+    print( type ( region ))
+    print("{0} in region -> {1}".format( countryCode, region))
+
+    print("-"*80)
+
+    ret = countries.isDomestic( "FR" , "DE" , "Europe")
+    print("{0} - {1} are both in region {2} -> results -> {3}".format("FR","DE", "Europe" , ret))
+
+    ret = countries.isDomestic( "FR" , "US" , "Europe")
+    print("{0} - {1} are both in region {2} -> results -> {3}".format("FR","US", "Europe" , ret))
