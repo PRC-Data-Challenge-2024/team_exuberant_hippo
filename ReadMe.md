@@ -107,7 +107,7 @@ The root mean squared error (MSE) on test set: 2955.6551
 The root mean squared error (MSE) on test set: 2907.8136
 add openap pax data high low max
 The root mean squared error (MSE) on test set: 2919.5714
-add isDomestic 
+add isDomestic (European countries internal travels) isInternational based upon the region
 The root mean squared error (MSE) on test set: 2914.5551
 
 
