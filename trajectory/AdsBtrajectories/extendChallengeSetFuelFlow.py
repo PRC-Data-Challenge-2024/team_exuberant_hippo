@@ -14,63 +14,58 @@ from Environment.Constants import Meter2Feet
 from pathlib import Path
 
 import time
+from Engines.Engines import Engines
 
-def usage():
-    # create a fuel flow model for A320
-    fuelflow = FuelFlow(ac='A320')
 
-    # estimate fuel flow during cruise
-    FuelFlowKgPerSeconds = fuelflow.enroute(mass=60000, tas=230, alt=32000)
-    print ("en route fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
+def computeFuelFlowKilograms(engineFuelFlowKgSeconds, ):
+    pass
+    return 0.0
 
-    # estimate fuel flow at climb, with vertical speed (feet/min)
-    FuelFlowKgPerSeconds = fuelflow.enroute(mass=60000, tas=200, alt=20000, vs=1000)
-    print ("en route fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
+def getDefaultEngine( aircraft_type , unique_aircrafts):
+    for actype in unique_aircrafts:
+        if str( aircraft_type ) .lower() == str(actype).lower():
+            if ( str(actype).lower() == 'bcs3' ) or ( str(actype).lower() == 'bcs1' ) :
+                actype = 'a310'
+            aircraft = prop.aircraft(ac=str(actype).lower(), use_synonym=True)
+            if (aircraft):
+                pass
+            else:
+                raise ValueError("aircraft not found - {0}".format( actype))
+            #print ( aircraft )
+            
+            return ( aircraft['engine']['default'])
+    return "unknown-engine"
 
-    # estimate fuel flow at with a given thrust (e.g., derived from drag model)
-    FuelFlowKgPerSeconds = fuelflow.at_thrust(acthr=50000, alt=30000)
-    print ("at thrust fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
 
-    # estimate fuel flow at takeoff
-    FuelFlowKgPerSeconds = fuelflow.takeoff(tas=100, alt=0, throttle=1)
-    print ("takeoff fuel flow = {0} kilograms per second".format(FuelFlowKgPerSeconds))
-    print('-'*70) 
+def getNumberOfEngines(aircraft_type , unique_aircrafts):
+    for actype in unique_aircrafts:
+        if str( aircraft_type ) .lower() == str(actype).lower():
+            if ( str(actype).lower() == 'bcs3' ) or ( str(actype).lower() == 'bcs1' ) :
+                actype = 'a310'
+            aircraft = prop.aircraft(ac=str(actype).lower(), use_synonym=True)
+            if (aircraft):
+                pass
+            else:
+                raise ValueError("aircraft not found - {0}".format( actype))
+            #print ( aircraft )
+            
+            return ( int(aircraft['engine']['number']) )
+    return 2
 
-def cleanAircraftMaxAltitudeFeet(maxAltitudeFeet , ceilingFeet ):
-    if math.isnan(maxAltitudeFeet):
-        ''' 11000 meters ceiling'''
-        return max ( ceilingFeet , 11000.0 * Meter2Feet)
-    else:
-        return maxAltitudeFeet
-
-def getOpenapAircraftFuelFlow(aircraft_type):
-    fuelflow = FuelFlow(ac=str(aircraft_type).lower() )
-    return fuelflow
-
-def cleanAvgGroundSpeedKnots(avgGroundSpeedKnots , vmo):
-    if math.isnan(avgGroundSpeedKnots):
-        return vmo
-    else:
-        return avgGroundSpeedKnots
-
-def computeTopOfDescentWeightKg(aircraft_type, maxTakeOffWeightKg , avgGroundSpeedKnots, vmo, maxAltitudeFeet, ceilingFeet , flightDurationMinutes):
-    print(aircraft_type)
-    aircraft = prop.aircraft(ac=aircraft_type, eng=None)
-    print ('-'*70)
-    print ( aircraft )
-    kwargs = {"use_synonym":True}
-    fuelflow = FuelFlow(ac=str(aircraft_type).lower() , eng=None )
-    avgGroundSpeedKnots = cleanAvgGroundSpeedKnots ( avgGroundSpeedKnots, vmo )
-    maxAltitudeFeet = cleanAircraftMaxAltitudeFeet( maxAltitudeFeet , ceilingFeet)
-    fuelFlowKgPerSeconds = fuelflow.enroute(mass=maxTakeOffWeightKg, tas=avgGroundSpeedKnots, alt=maxAltitudeFeet)
-    fuelLossKg = fuelFlowKgPerSeconds * ( flightDurationMinutes * 60.0)
-    if ( maxTakeOffWeightKg > fuelLossKg):
-        return maxTakeOffWeightKg - fuelLossKg
-    else:
-        return fuelLossKg
+def getDefaultEngineFuelFlowKgSeconds( aircraft_type , unique_aircrafts , engines ):
+    for actype in unique_aircrafts:
+        if str( aircraft_type ) .lower() == str(actype).lower():
+            if ( str(actype).lower() == 'bcs3' ) or ( str(actype).lower() == 'bcs1' ) :
+                actype = 'a310'
+            aircraft = prop.aircraft(ac=str(actype).lower(), use_synonym=True)
+            if (aircraft):
+                pass
+            else:
+                raise ValueError("aircraft not found - {0}".format( actype))
+            #print ( aircraft )
+            
+            return  engines.getFuelFlowAtClimbOutKgPerSeconds(aircraft['engine']['default'])
+    return 0.0 
 
 if __name__ == '__main__':
 
@@ -85,36 +80,41 @@ if __name__ == '__main__':
     print ( df.shape )
     print ( list ( df ))
 
-    ''' add openap data for each aircraft '''
-    for openapProperty in ['ceiling', 'cruise_mach']:
+    unique_aircrafts = df['aircraft_type'].unique()
+    print (unique_aircrafts)
 
-        df_openap = readAircraftOpenapData( openapProperty )
-    
-        print('''--- left join challenge and submission -> with openap data --- ''')
-        df = df.merge( df_openap, how="left", on="flight_id" )
-        print ( df.shape )
-        print ( list ( df ))
+    engines = Engines()
+    df_engines = engines.read()
 
+    print ("-"*80)
+    print("--- default engine ---")
+    df['default_engine'] = df.apply( lambda row: getDefaultEngine( row['aircraft_type'] , unique_aircrafts )   , axis=1 )
 
-    #df_post_cruise_weight_kg = 
-    df['topOfDescentWeightKg'] = df.apply(lambda row: computeTopOfDescentWeightKg(row['aircraft_type'], row['mtow'] , row['avgGroundSpeedKnots'], row['vmo'] , row['maxAltitudeFeet'], row['ceiling']*Meter2Feet , row['flight_duration']), axis=1)
+    print ("-"*80)
+    print("--- number of engines ---")
+    df['number_of_engines'] = df.apply( lambda row: getNumberOfEngines( row['aircraft_type'] , unique_aircrafts )   , axis=1 )
 
-    print ( list ( df ) )
-    for columnName in list ( df ) :
-        if columnName in ['flight_id', 'topOfDescentWeightKg']:
+    print ("-"*80)
+    print("--- default engine fuel flow kg per Seconds ---")
+    df['fuel_flow_kg_sec'] = df.apply( lambda row : getDefaultEngineFuelFlowKgSeconds ( row['aircraft_type'] , unique_aircrafts , engines ) , axis=1)
+
+    ColumnsToKeep = ['flight_id','aircraft_type','default_engine','number_of_engines','fuel_flow_kg']
+    for columnName in list(df):
+        if columnName in ColumnsToKeep:
             pass
         else:
-            df.drop(labels=columnName, axis=1, inplace=True)
-    
-    print("-"*80)
-    print ( list( df ))
-    print("-"*80)
-    outputCsvFileName = "extendedChallengeSetFuelFlow.csv"
+            df.drop(columnName, axis=1 , inplace=True)
 
+    print ( list ( df ) )
+        
+    outputCsvFileName = "extendedOpenap_Engines.csv"
+        
     directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
     directory = Path(directoryPath)
     if directory.is_dir():
         print ( "it is a directory - {0}".format(directoryPath))
         filePath = os.path.join(directory, outputCsvFileName)
-        print ( filePath )
+            
         df.to_csv(filePath , index = False , sep = ";")
+
+
