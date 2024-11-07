@@ -435,6 +435,62 @@ def computeChallengeSubmission():
     print ( list ( df_concat ))
     return df_concat
 
+def readOpenapEngines():
+
+    print(''' ---------- read the openap extension with engines data ''')
+
+    df = None
+    fileName = "extendedOpenap_Engines.csv"
+    print("--- Read CSV file-> {0}".format(fileName))
+
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
+
+    directory = Path(directoryPath)
+    if directory.is_dir():
+        print ( "it is a directory - {0}".format(directoryPath))
+        filePath = os.path.join(directory, fileName)
+        print ( filePath )
+        
+        df = pd.read_csv ( filePath , sep = ";" )
+        print ( list (df ))
+
+        columnsToKeep = ['flight_id', 'default_engine', 'number_of_engines', 'fuel_flow_kg_sec']
+        for columnName in list(df):
+            if columnName in columnsToKeep:
+                pass
+            else:
+                df = df.drop(columnName, axis=1)
+
+    return df
+
+def readOpenapFuelFlowKilograms():
+
+    print(''' ---------- read the openap extension with fuel flow data ''')
+
+    df = None
+    fileName = "extendedOpenap_FuelFlow.csv"
+    print("--- Read CSV file-> {0}".format(fileName))
+
+    directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
+
+    directory = Path(directoryPath)
+    if directory.is_dir():
+        print ( "it is a directory - {0}".format(directoryPath))
+        filePath = os.path.join(directory, fileName)
+        print ( filePath )
+        
+        df = pd.read_csv ( filePath , sep = ";" )
+        print ( list (df ))
+
+        columnsToKeep = ['flight_id', 'fuel_flow_kg']
+        for columnName in list(df):
+            if columnName in columnsToKeep:
+                pass
+            else:
+                df = df.drop(columnName, axis=1)
+
+    return df
+
 
 def readChallengeSetAdepAdesIsDomestic():
 

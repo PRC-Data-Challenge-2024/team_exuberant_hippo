@@ -13,7 +13,7 @@ from utils import extendDataSetWithRunwaysdata
 from utils import extendDataSetWithAircraftData
 from utils import readExtendedAirportsRunways , readExtendedAirports, readExtendedAircrafts
 from utils import readAircraftOpenapData , readOpenSkyMediansClimbDescentRates , readExtendedChallengeSetDurations
-from utils import readOpenapPaxData , readChallengeSetAdepAdesIsDomestic
+from utils import readOpenapPaxData , readChallengeSetAdepAdesIsDomestic , readOpenapFuelFlowKilograms
 
 from pathlib import Path
 from datetime import datetime
@@ -179,14 +179,25 @@ if __name__ == '__main__':
         print ( df.shape )
         print ( list ( df ))
 
-    extendedAdepAdesIsDomestic = True
-    if extendedAdepAdesIsDomestic == True:
+    extendedAdepAdesIsDomesticIsAvailable = True
+    if extendedAdepAdesIsDomesticIsAvailable == True:
 
         df_isDomestic = readChallengeSetAdepAdesIsDomestic()
 
         print('''--- left join challenge and submission -> with Adep Ades isDomestic True False --- ''')
 
         df = df.merge( df_isDomestic, how="left", on="flight_id" )
+        print ( df.shape )
+        print ( list ( df ))
+
+    extendedAdepAdesIsDomesticIsAvailable = True
+    if extendedAdepAdesIsDomesticIsAvailable ==  True:
+
+        df_openap_fuel_flow = readOpenapFuelFlowKilograms()
+
+        print('''--- left join challenge and submission -> with Openap Default Engine Fuel Flow  --- ''')
+
+        df = df.merge( df_openap_fuel_flow, how="left", on="flight_id" )
         print ( df.shape )
         print ( list ( df ))
 
