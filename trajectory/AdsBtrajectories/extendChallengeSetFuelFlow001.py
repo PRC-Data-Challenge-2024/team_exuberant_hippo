@@ -98,7 +98,7 @@ if __name__ == '__main__':
     print("--- default engine fuel flow kg per Seconds ---")
     df['fuel_flow_kg_sec'] = df.apply( lambda row : getDefaultEngineFuelFlowKgSeconds ( row['aircraft_type'] , unique_aircrafts , engines ) , axis=1)
 
-    ColumnsToKeep = ['flight_id','aircraft_type','default_engine','number_of_engines','fuel_flow_kg']
+    ColumnsToKeep = ['flight_id','aircraft_type','default_engine','number_of_engines','fuel_flow_kg_sec']
     for columnName in list(df):
         if columnName in ColumnsToKeep:
             pass

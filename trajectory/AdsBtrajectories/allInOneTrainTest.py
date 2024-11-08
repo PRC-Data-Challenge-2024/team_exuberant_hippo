@@ -18,6 +18,7 @@ from utils import readOpenapPaxData , readChallengeSetAdepAdesIsDomestic , readO
 from pathlib import Path
 from datetime import datetime
 
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import  root_mean_squared_error
 from utils import encodeCategoryColumn
 import pandas as pd
@@ -190,8 +191,8 @@ if __name__ == '__main__':
         print ( df.shape )
         print ( list ( df ))
 
-    extendedAdepAdesIsDomesticIsAvailable = True
-    if extendedAdepAdesIsDomesticIsAvailable ==  True:
+    extendedFuelFlowIsAvailable = True
+    if extendedFuelFlowIsAvailable ==  True:
 
         df_openap_fuel_flow = readOpenapFuelFlowKilograms()
 
@@ -212,28 +213,40 @@ if __name__ == '__main__':
 
     print ( list ( df ))
     
-    print ("--- encode airline ---")
+    #print ("--- encode airline ---")
     unique_airlines_keys = df['airline'].unique()
     #print("unique airlines = {0}".format((unique_airlines_keys)))
     print("number of unique airlines = {0}".format(len(unique_airlines_keys)))
         
-    df['airline'] = df['airline'].apply( lambda x : convert_airlines_keys(unique_airlines_keys, x) )
-        
+    #df['airline'] = df['airline'].apply( lambda x : convert_airlines_keys(unique_airlines_keys, x) )
     print(''' encoding airline, aircraft type and wtc , adep and ades and their country codes ''')
-    
-    oheAirline , df_encoded_airline , final_df = encodeCategoryColumn( df , 'airline' )
-    oheAircraftType , df_encoded_aircraft_type, final_df = encodeCategoryColumn( final_df , 'aircraft_type')
-    oheWTC , df_encoded_wtc , final_df = encodeCategoryColumn(final_df  , 'wtc')
-    oheClassEngine , df_encoded_class_engine, final_df = encodeCategoryColumn( final_df , 'physicalClassEngine')
+    #oheAirline , df_encoded_airline , final_df = encodeCategoryColumn( df , 'airline' )
+    df = df.drop('airline' , axis=1)
+
+    #oheAircraftType , df_encoded_aircraft_type, final_df = encodeCategoryColumn( df , 'aircraft_type')
+    #oheWTC , df_encoded_wtc , final_df = encodeCategoryColumn(final_df  , 'wtc')
+    #oheClassEngine , df_encoded_class_engine, final_df = encodeCategoryColumn( final_df , 'physicalClassEngine')
     ''' 23 October 2024 encode adep and ades '''
-    oheAdep , df_encoded_adep , final_df = encodeCategoryColumn ( final_df , 'adep')
-    oheAdes , df_encoded_ades , final_df = encodeCategoryColumn ( final_df , 'ades')
+    #oheAdep , df_encoded_adep , final_df = encodeCategoryColumn ( final_df , 'adep')
+    #oheAdes , df_encoded_ades , final_df = encodeCategoryColumn ( final_df , 'ades')
     ''' 23 October 2024 - Encode adep country code and ades country code '''
-    oheAdepCountryCode , df_encoded_adep_country , final_df = encodeCategoryColumn ( final_df , 'country_code_adep')
-    oheAdesCountryCode , df_encoded_ades_country , final_df = encodeCategoryColumn ( final_df , 'country_code_ades')
+    #oheAdepCountryCode , df_encoded_adep_country , final_df = encodeCategoryColumn ( final_df , 'country_code_adep')
+    #oheAdesCountryCode , df_encoded_ades_country , final_df = encodeCategoryColumn ( final_df , 'country_code_ades')
+
+    final_df = df
+
+    for column in ['aircraft_type','wtc','physicalClassEngine']:
+        if column in list(final_df):
+            final_df = final_df.drop(column, axis=1)
+
+
+    for column in ['adep','ades','country_code_adep','country_code_ades']:
+        if column in list(final_df):
+            final_df = final_df.drop(column, axis=1)
     
     print(list(final_df))
-    ''' drop columns containing categories '''
+
+    print(''' drop columns containing categories ''')
     for column in ['name_adep','name_ades']:
         if column in list(final_df):
             final_df = final_df.drop(column, axis=1)
@@ -241,11 +254,10 @@ if __name__ == '__main__':
     ''' 27th October 2024 '''
     #final_df = final_df.extendedAircraftsWithOpenap(df)
 
-    
     print ( list ( final_df ))
     print(final_df.head(10))
     
-    ''' prepare for train and test '''
+    print('''--- prepare for train and test ---''')
     print ( '--- train dataframe - keep only records with tow being not null ---')
     tow_not_null_df = final_df[final_df['tow'].notnull()]
     print ( tow_not_null_df.shape  )
@@ -259,10 +271,14 @@ if __name__ == '__main__':
     print(''' --- creating a dataframe with rest 20% of original dataframe ''')
     test_df = tow_not_null_df.drop(train_df.index)
     print ( test_df.shape )
-    
+
+    print('---- do not use standard scaler ---')
+    #scaler = StandardScaler()
+
     print ("--- drop tow column in X train -> tow is the prediction ---")
     X_train_df = train_df.drop(columns=['tow'])
     print ( X_train_df.shape )
+    #X_train_df = scaler.fit_transform( X_train_df )
 
     print ("--- Y train ---")
     # Keep only 'tow'  column
@@ -284,6 +300,7 @@ if __name__ == '__main__':
     print ("---- build X_test -> drop tow column ---")
     X_test_df = test_df.drop(columns=['tow'])
     print ( X_test_df.shape )
+    #X_test_df = scaler.fit_transform( X_test_df )
 
     print ("--- build Y test to compare with ---")
     print('''--- keep only the tow column in the Y test ''')

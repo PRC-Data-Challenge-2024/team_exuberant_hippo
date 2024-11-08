@@ -109,7 +109,14 @@ add openap pax data high low max
 The root mean squared error (MSE) on test set: 2919.5714
 add isDomestic (European countries internal travels) isInternational based upon the region
 The root mean squared error (MSE) on test set: 2914.5551
-
+add fuel flow 
+The root mean squared error (MSE) on test set: 2911.6201
+suppress adep ades country adep and country ades encoding
+The root mean squared error (MSE) on test set: 2922.5221
+suppress airline encoding
+The root mean squared error (MSE) on test set: 2943.5942
+without any one hot encoder on aircraft type , airline, wtc, physical engine(jet,turboprop)
+The root mean squared error (MSE) on test set: 2931.8298
 
 ## isolate the Y_to_predict based upon tow is null
 ## launch the Y_prediction and build the "submission" CSV file

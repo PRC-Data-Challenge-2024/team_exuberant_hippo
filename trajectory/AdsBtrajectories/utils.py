@@ -203,7 +203,7 @@ def readSubmissionSet(fileName):
 def readOpenapPaxData():
 
     df = None
-    fileName = "extendedOpenap_pax_high.csv"
+    fileName = "extendedOpenap_pax_high_kg.csv"
     print("--- Read Openap Pax CSV file-> {0}".format(fileName))
 
     directoryPath = os.path.join( os.path.dirname(__file__) , "Results" )
@@ -216,8 +216,11 @@ def readOpenapPaxData():
         
         df = pd.read_csv ( filePath , sep = ";" )
         print ( list (df ))
-        for columnName in ['aircraft_type']:
-            if columnName in list(df):
+        columnsToKeep = ['flight_id','pax_high_kg']
+        for columnName in list(df):
+            if columnName in columnsToKeep:
+                pass
+            else:
                 df = df.drop(columnName, axis=1)
 
     return df

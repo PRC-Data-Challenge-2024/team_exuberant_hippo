@@ -96,10 +96,12 @@ if __name__ == '__main__':
         pass
         #df[openapProperty] = df.apply(lambda row: computeOpenapSubProperty( str( row['aircraft_type'] ).lower() , 'fuel', openapProperty ), axis=1)
 
-    
     for openapProperty in ['max','low','high']:
         mainProperty = "pax"
         print ( openapProperty )
         columnName = mainProperty +"_"+openapProperty
         df[columnName] = df.apply(lambda row: computeOpenapSubProperty( str( row['aircraft_type'] ).lower() , mainProperty, openapProperty ), axis=1)
         createOpenapPropertyCSV(df , mainProperty  + "_" + openapProperty)
+
+    df['pax_high_kg'] =  df.apply ( lambda row :  (row['pax_high'] * 80.0 ) , axis=1)
+    createOpenapPropertyCSV(df , "pax_high_kg")
