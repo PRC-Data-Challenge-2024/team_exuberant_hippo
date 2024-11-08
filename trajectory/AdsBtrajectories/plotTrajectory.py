@@ -31,6 +31,7 @@ def plotTrajectory():
     print ( traj )
     flight_id = "248763780"
     flight_id = "248763775" # 7 minutes between Top of climb and top of descent
+    flight_id = "248753286"
     for t in traj:
         if ( t['flight_id'] == int(str(flight_id)) ):
             
